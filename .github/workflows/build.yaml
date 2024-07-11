@@ -1,0 +1,13 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    uses: ukasyah-dev/actions/.github/workflows/build-docker-go.yaml@main
+    permissions:
+      contents: read
+      packages: write
+    secrets: inherit
