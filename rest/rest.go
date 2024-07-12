@@ -37,6 +37,13 @@ func init() {
 		Tags:        []string{"Health"},
 	})
 
+	// Auth
+	handler.Add(Server, http.MethodPost, "/auth/sign-up", controller.SignUp, handler.Config{
+		Summary:     "Sign up",
+		Description: "Sign up for a new user account.",
+		Tags:        []string{"Auth"},
+	})
+
 	handler.Add(Server, http.MethodGet, "/hello/:name", controller.Hello, handler.Config{
 		Summary:     "Say hello",
 		Description: "We will greet you with warmth and kindness.",
