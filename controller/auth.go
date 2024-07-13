@@ -2,9 +2,11 @@ package controller
 
 import (
 	"context"
+	"os"
 
 	"github.com/ukasyah-dev/common/errors"
 	"github.com/ukasyah-dev/common/log"
+	"github.com/ukasyah-dev/common/mail"
 	commonModel "github.com/ukasyah-dev/common/model"
 	"github.com/ukasyah-dev/common/validator"
 	"github.com/ukasyah-dev/identity-service/constant"
@@ -33,9 +35,42 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 	}
 
 	if alreadyExists {
-		log.Debug("TODO: Ask user to login via email")
+		err = mail.Send(mail.Email{
+			From:    os.Getenv("EMAIL_FROM"),
+			To:      req.Email,
+			Subject: "Sign in to Your Account",
+			Body: mail.Body{
+				Name:   req.Name,
+				Intros: []string{"Your email has been registered. Please click the link below to proceed."},
+				Actions: []mail.Action{
+					{
+						Text: "Sign in",
+						Link: os.Getenv("EMAIL_AUTH_URL") + "/sign-in",
+					},
+				},
+			},
+		})
 	} else {
-		log.Debug("TODO: Send verification link via email")
+		err = mail.Send(mail.Email{
+			From:    os.Getenv("EMAIL_FROM"),
+			To:      req.Email,
+			Subject: "Verify Your Account",
+			Body: mail.Body{
+				Name:   req.Name,
+				Intros: []string{"You need to pass the verification step. Please click the link below to proceed."},
+				Actions: []mail.Action{
+					{
+						Text: "Verify your account",
+						Link: os.Getenv("EMAIL_AUTH_URL") + "/verify",
+					},
+				},
+			},
+		})
+	}
+
+	if err != nil {
+		log.Errorf("Failed to send email: %s", err)
+		return nil, errors.Internal()
 	}
 
 	return &commonModel.BasicResponse{

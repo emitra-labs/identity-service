@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-faker/faker/v4"
 	dt "github.com/ukasyah-dev/common/db/testkit"
+	"github.com/ukasyah-dev/common/mail"
 	"github.com/ukasyah-dev/identity-service/constant"
 	"github.com/ukasyah-dev/identity-service/controller"
 	"github.com/ukasyah-dev/identity-service/db"
@@ -16,8 +17,10 @@ import (
 func TestMain(m *testing.M) {
 	dt.CreateTestDB()
 	db.Open()
+	mail.Open(os.Getenv("SMTP_URL"))
 	setupTestData()
 	code := m.Run()
+	mail.Close()
 	db.Close()
 	dt.DestroyTestDB()
 	os.Exit(code)
