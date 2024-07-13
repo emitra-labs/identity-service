@@ -11,7 +11,7 @@ import (
 )
 
 func TestSignUp_Success(t *testing.T) {
-	testkit.New(rest.Server).Debug().
+	testkit.New(rest.Server).
 		Post("/auth/sign-up").
 		JSON(map[string]any{
 			"name":     faker.Name(),
@@ -20,6 +20,6 @@ func TestSignUp_Success(t *testing.T) {
 		}).
 		Expect(t).
 		Status(http.StatusOK).
-		Assert(jsonpath.Contains("$.message", "TODO: Sign up")).
+		Assert(jsonpath.Contains("$.message", "Check your email")).
 		End()
 }
