@@ -2,7 +2,7 @@ module github.com/ukasyah-dev/identity-service
 
 go 1.22.5
 
-replace github.com/ukasyah-dev/common => ../common
+// replace github.com/ukasyah-dev/common => ../common
 
 require (
 	github.com/appleboy/graceful v1.1.1
@@ -10,7 +10,7 @@ require (
 	github.com/go-faker/faker/v4 v4.4.2
 	github.com/steinfletcher/apitest-jsonpath v1.7.2
 	github.com/swaggest/openapi-go v0.2.53
-	github.com/ukasyah-dev/common v0.0.0-20240712093944-3a9c38d765eb
+	github.com/ukasyah-dev/common v0.0.0-20240712103731-7b72e685ef89
 )
 
 require (
