@@ -23,3 +23,17 @@ func TestSignUp_Success(t *testing.T) {
 		Assert(jsonpath.Contains("$.message", "Check your email")).
 		End()
 }
+
+func TestSignUp_DuplicateEmail(t *testing.T) {
+	testkit.New(rest.Server).
+		Post("/auth/sign-up").
+		JSON(map[string]any{
+			"name":     faker.Name(),
+			"email":    testData.users[0].Email,
+			"password": faker.Password(),
+		}).
+		Expect(t).
+		Status(http.StatusOK).
+		Assert(jsonpath.Contains("$.message", "Check your email")).
+		End()
+}
