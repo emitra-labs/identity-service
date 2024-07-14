@@ -10,7 +10,8 @@ import (
 	dt "github.com/ukasyah-dev/common/db/testkit"
 	"github.com/ukasyah-dev/common/mail"
 	"github.com/ukasyah-dev/identity-service/constant"
-	"github.com/ukasyah-dev/identity-service/controller"
+	"github.com/ukasyah-dev/identity-service/controller/user"
+	"github.com/ukasyah-dev/identity-service/controller/verification"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
 )
@@ -42,18 +43,18 @@ func setupTestData() {
 			status = constant.UserStatusPendingVerification
 		}
 
-		user, _ := controller.CreateUser(ctx, &model.CreateUserRequest{
+		u, _ := user.CreateUser(ctx, &model.CreateUserRequest{
 			Name:     faker.Name(),
 			Email:    faker.Email(),
 			Password: "SuperSecret",
 			Status:   status,
 		})
 
-		testData.users = append(testData.users, user)
+		testData.users = append(testData.users, u)
 
 		if status == constant.UserStatusPendingVerification {
-			verification, _ := controller.CreateVerification(ctx, &model.CreateVerificationRequest{
-				UserID:    user.ID,
+			verification, _ := verification.CreateVerification(ctx, &model.CreateVerificationRequest{
+				UserID:    u.ID,
 				ExpiresAt: time.Now().Add(15 * time.Minute),
 			})
 

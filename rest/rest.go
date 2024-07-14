@@ -8,6 +8,8 @@ import (
 	"github.com/ukasyah-dev/common/rest/handler"
 	"github.com/ukasyah-dev/common/rest/server"
 	"github.com/ukasyah-dev/identity-service/controller"
+	"github.com/ukasyah-dev/identity-service/controller/auth"
+	"github.com/ukasyah-dev/identity-service/controller/verification"
 )
 
 var Server *server.Server
@@ -38,14 +40,14 @@ func init() {
 	})
 
 	// Auth
-	handler.Add(Server, http.MethodPost, "/auth/sign-up", controller.SignUp, handler.Config{
+	handler.Add(Server, http.MethodPost, "/auth/sign-up", auth.SignUp, handler.Config{
 		Summary:     "Sign up",
 		Description: "Sign up for a new user account.",
 		Tags:        []string{"Auth"},
 	})
 
 	// Verification
-	handler.Add(Server, http.MethodPost, "/verify", controller.Verify, handler.Config{
+	handler.Add(Server, http.MethodPost, "/verify", verification.Verify, handler.Config{
 		Summary:     "Verify user",
 		Description: "Verify user using data taken from verification email.",
 		Tags:        []string{"Verification"},

@@ -1,4 +1,4 @@
-package controller
+package auth
 
 import (
 	"context"
@@ -12,6 +12,8 @@ import (
 	commonModel "github.com/ukasyah-dev/common/model"
 	"github.com/ukasyah-dev/common/validator"
 	"github.com/ukasyah-dev/identity-service/constant"
+	"github.com/ukasyah-dev/identity-service/controller/user"
+	"github.com/ukasyah-dev/identity-service/controller/verification"
 	"github.com/ukasyah-dev/identity-service/model"
 )
 
@@ -22,7 +24,7 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 
 	alreadyExists := false
 
-	user, err := CreateUser(ctx, &model.CreateUserRequest{
+	u, err := user.CreateUser(ctx, &model.CreateUserRequest{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
@@ -57,8 +59,8 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 			return nil, errors.Internal()
 		}
 	} else {
-		verification, err := CreateVerification(ctx, &model.CreateVerificationRequest{
-			UserID:    user.ID,
+		v, err := verification.CreateVerification(ctx, &model.CreateVerificationRequest{
+			UserID:    u.ID,
 			ExpiresAt: time.Now().Add(15 * time.Minute),
 		})
 		if err != nil {
@@ -75,7 +77,7 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 				Actions: []mail.Action{
 					{
 						Text: "Verify your account",
-						Link: fmt.Sprintf("%s/verify?userId=%s&token=%s", os.Getenv("EMAIL_AUTH_URL"), user.ID, verification.Token),
+						Link: fmt.Sprintf("%s/verify?userId=%s&token=%s", os.Getenv("EMAIL_AUTH_URL"), u.ID, v.Token),
 					},
 				},
 			},
