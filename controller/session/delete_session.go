@@ -5,12 +5,13 @@ import (
 
 	"github.com/ukasyah-dev/common/errors"
 	"github.com/ukasyah-dev/common/log"
+	commonModel "github.com/ukasyah-dev/common/model"
 	"github.com/ukasyah-dev/common/validator"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
 )
 
-func DeleteOldSessions(ctx context.Context, req *model.DeleteOldSessionsRequest) (*model.Empty, error) {
+func DeleteOldSessions(ctx context.Context, req *model.DeleteOldSessionsRequest) (*commonModel.Empty, error) {
 	if err := validator.Validate(req); err != nil {
 		return nil, err
 	}
@@ -24,5 +25,5 @@ func DeleteOldSessions(ctx context.Context, req *model.DeleteOldSessionsRequest)
 		return nil, errors.Internal()
 	}
 
-	return &model.Empty{}, nil
+	return &commonModel.Empty{}, nil
 }

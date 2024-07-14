@@ -5,10 +5,12 @@ import (
 	"os"
 
 	"github.com/swaggest/openapi-go/openapi31"
+	commonAuth "github.com/ukasyah-dev/common/auth"
 	"github.com/ukasyah-dev/common/rest/handler"
 	"github.com/ukasyah-dev/common/rest/server"
 	"github.com/ukasyah-dev/identity-service/controller"
 	"github.com/ukasyah-dev/identity-service/controller/auth"
+	"github.com/ukasyah-dev/identity-service/controller/user"
 	"github.com/ukasyah-dev/identity-service/controller/verification"
 )
 
@@ -27,10 +29,17 @@ func init() {
 			{URL: os.Getenv("OPENAPI_SERVER_URL")},
 		},
 	}
-	spec.SetHTTPBearerTokenSecurity("BearerAuth", "JWT", "")
 
+	// Parse JWT public key
+	jwtPublicKey, err := commonAuth.ParsePublicKeyFromBase64(os.Getenv("BASE64_JWT_PUBLIC_KEY"))
+	if err != nil {
+		panic(err)
+	}
+
+	// Create new server
 	Server = server.New(server.Config{
-		OpenAPI: server.OpenAPI{Spec: &spec},
+		OpenAPI:      server.OpenAPI{Spec: &spec},
+		JWTPublicKey: jwtPublicKey,
 	})
 
 	handler.Add(Server, http.MethodGet, "/", controller.HealthCheck, handler.Config{
@@ -49,6 +58,14 @@ func init() {
 		Summary:     "Sign in",
 		Description: "Sign in.",
 		Tags:        []string{"Auth"},
+	})
+
+	// User
+	handler.Add(Server, http.MethodGet, "/users/current", user.GetCurrentUser, handler.Config{
+		Summary:      "Get current user",
+		Description:  "Get current user.",
+		Tags:         []string{"User"},
+		Authenticate: true,
 	})
 
 	// Verification
