@@ -19,3 +19,10 @@ cp .env.example .env
 # Load .env file and run the program
 godotenv go run .
 ```
+
+## Features
+
+- Authentication.
+- Email verification.
+- Session management.
+- User management.
