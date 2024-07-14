@@ -54,15 +54,17 @@ func Verify(ctx context.Context, req *model.VerifyRequest) (*commonModel.BasicRe
 		return nil, errors.Internal()
 	}
 
+	// Set user status to active
 	verification.User.Status = constant.UserStatusActive
-
 	if err := db.DB.Save(verification.User).Error; err != nil {
 		log.Errorf("Failed to update user status: %s", err)
 		return nil, err
 	}
 
-	if err := db.DB.Delete(&verification).Error; err != nil {
-		log.Errorf("Failed to delete verification: %s", err)
+	// Set verification status to success
+	verification.Status = constant.VerificationStatusSuccess
+	if err := db.DB.Save(&verification).Error; err != nil {
+		log.Errorf("Failed to update verification status: %s", err)
 		return nil, err
 	}
 
