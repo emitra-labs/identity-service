@@ -2,13 +2,15 @@ module github.com/ukasyah-dev/identity-service
 
 go 1.22.5
 
+replace github.com/imdario/mergo => github.com/imdario/mergo v0.3.16
+
 require (
 	github.com/appleboy/graceful v1.1.1
 	github.com/caitlinelfring/go-env-default v1.1.0
 	github.com/go-faker/faker/v4 v4.4.2
 	github.com/steinfletcher/apitest-jsonpath v1.7.2
 	github.com/swaggest/openapi-go v0.2.53
-	github.com/ukasyah-dev/common v0.0.3
+	github.com/ukasyah-dev/common v0.0.4
 	gorm.io/gorm v1.25.11
 )
 
