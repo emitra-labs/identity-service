@@ -60,6 +60,13 @@ func SignIn(ctx context.Context, req *model.SignInRequest) (*model.SignInRespons
 		return nil, err
 	}
 
+	_, err = session.DeleteOldSessions(ctx, &model.DeleteOldSessionsRequest{
+		UserID: u.ID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &model.SignInResponse{
 		Access: model.Access{
 			Token:     accessToken,

@@ -16,3 +16,7 @@ type CreateSessionRequest struct {
 	UserID    string    `validate:"required"`
 	ExpiresAt time.Time `validate:"required"`
 }
+
+type DeleteOldSessionsRequest struct {
+	UserID string `validate:"required"`
+}
