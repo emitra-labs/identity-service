@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"os"
 
 	"github.com/appleboy/graceful"
 	"github.com/caitlinelfring/go-env-default"
+	"github.com/ukasyah-dev/common/mail"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/rest"
 )
@@ -13,6 +15,7 @@ var port = env.GetIntDefault("PORT", 3000)
 
 func init() {
 	db.Open()
+	mail.Open(os.Getenv("SMTP_URL"))
 }
 
 func main() {
@@ -24,6 +27,14 @@ func main() {
 
 	m.AddShutdownJob(func() error {
 		return rest.Server.Shutdown()
+	})
+
+	m.AddShutdownJob(func() error {
+		return mail.Close()
+	})
+
+	m.AddShutdownJob(func() error {
+		return db.Close()
 	})
 
 	<-m.Done()
