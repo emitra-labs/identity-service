@@ -61,6 +61,11 @@ func Verify(ctx context.Context, req *model.VerifyRequest) (*commonModel.BasicRe
 		return nil, err
 	}
 
+	if err := db.DB.Delete(&verification).Error; err != nil {
+		log.Errorf("Failed to delete verification: %s", err)
+		return nil, err
+	}
+
 	return &commonModel.BasicResponse{
 		Message: "Your account has been verified.",
 	}, nil
