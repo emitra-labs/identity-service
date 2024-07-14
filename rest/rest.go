@@ -43,4 +43,11 @@ func init() {
 		Description: "Sign up for a new user account.",
 		Tags:        []string{"Auth"},
 	})
+
+	// Verification
+	handler.Add(Server, http.MethodPost, "/verify", controller.Verify, handler.Config{
+		Summary:     "Verify user",
+		Description: "Verify user using data taken from verification email.",
+		Tags:        []string{"Verification"},
+	})
 }

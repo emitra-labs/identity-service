@@ -2,8 +2,8 @@ package controller
 
 import (
 	"context"
+	e "errors"
 
-	dbErrors "github.com/ukasyah-dev/common/db/errors"
 	"github.com/ukasyah-dev/common/errors"
 	"github.com/ukasyah-dev/common/hash"
 	"github.com/ukasyah-dev/common/id"
@@ -11,6 +11,7 @@ import (
 	"github.com/ukasyah-dev/common/validator"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
+	"gorm.io/gorm"
 )
 
 func CreateUser(ctx context.Context, req *model.CreateUserRequest) (*model.User, error) {
@@ -28,7 +29,7 @@ func CreateUser(ctx context.Context, req *model.CreateUserRequest) (*model.User,
 	}
 
 	if err := db.DB.WithContext(ctx).Create(user).Error; err != nil {
-		if dbErrors.IsUniqueViolation(err) {
+		if e.Is(err, gorm.ErrDuplicatedKey) {
 			return nil, errors.AlreadyExists()
 		}
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/go-faker/faker/v4"
 	dt "github.com/ukasyah-dev/common/db/testkit"
@@ -27,19 +28,36 @@ func TestMain(m *testing.M) {
 }
 
 var testData struct {
-	users []*model.User
+	users         []*model.User
+	verifications []*model.Verification
 }
 
 func setupTestData() {
 	ctx := context.Background()
 
-	for i := 1; i <= 5; i++ {
+	for i := 0; i <= 4; i++ {
+		status := constant.UserStatusActive
+
+		if i == 4 {
+			status = constant.UserStatusPendingVerification
+		}
+
 		user, _ := controller.CreateUser(ctx, &model.CreateUserRequest{
 			Name:     faker.Name(),
 			Email:    faker.Email(),
 			Password: "SuperSecret",
-			Status:   constant.UserStatusActive,
+			Status:   status,
 		})
+
 		testData.users = append(testData.users, user)
+
+		if status == constant.UserStatusPendingVerification {
+			verification, _ := controller.CreateVerification(ctx, &model.CreateVerificationRequest{
+				UserID:    user.ID,
+				ExpiresAt: time.Now().Add(15 * time.Minute),
+			})
+
+			testData.verifications = append(testData.verifications, verification)
+		}
 	}
 }

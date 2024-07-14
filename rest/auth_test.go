@@ -24,7 +24,7 @@ func TestSignUp_Success(t *testing.T) {
 		End()
 }
 
-func TestSignUp_DuplicateEmail(t *testing.T) {
+func TestSignUp_EmailExists(t *testing.T) {
 	testkit.New(rest.Server).
 		Post("/auth/sign-up").
 		JSON(map[string]any{

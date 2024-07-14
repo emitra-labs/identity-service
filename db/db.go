@@ -18,7 +18,10 @@ func Open() {
 		panic(err)
 	}
 
-	err = DB.AutoMigrate(&model.User{})
+	err = DB.AutoMigrate(
+		&model.User{},
+		&model.Verification{},
+	)
 	if err != nil {
 		panic(err)
 	}
