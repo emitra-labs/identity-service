@@ -20,3 +20,9 @@ type CreateUserRequest struct {
 	Status     string `json:"status" example:"active"`
 	SuperAdmin bool   `json:"-"`
 }
+
+type GetUserRequest struct {
+	ID     string `params:"id" path:"id" validate:"required_without=Email"`
+	Email  string `validate:"required_without=ID"`
+	Status string
+}

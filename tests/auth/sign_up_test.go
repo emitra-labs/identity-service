@@ -1,4 +1,4 @@
-package rest_test
+package auth_test
 
 import (
 	"net/http"
@@ -8,6 +8,7 @@ import (
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
 	"github.com/ukasyah-dev/identity-service/rest"
+	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestSignUp_Success(t *testing.T) {
@@ -29,7 +30,7 @@ func TestSignUp_EmailExists(t *testing.T) {
 		Post("/auth/sign-up").
 		JSON(map[string]any{
 			"name":     faker.Name(),
-			"email":    testData.users[0].Email,
+			"email":    tests.Data.Users[0].Email,
 			"password": faker.Password(),
 		}).
 		Expect(t).

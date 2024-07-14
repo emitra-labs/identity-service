@@ -1,39 +1,22 @@
-package rest_test
+package tests
 
 import (
 	"context"
-	"os"
-	"testing"
 	"time"
 
 	"github.com/go-faker/faker/v4"
-	dt "github.com/ukasyah-dev/common/db/testkit"
-	"github.com/ukasyah-dev/common/mail"
 	"github.com/ukasyah-dev/identity-service/constant"
 	"github.com/ukasyah-dev/identity-service/controller/user"
 	"github.com/ukasyah-dev/identity-service/controller/verification"
-	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
 )
 
-func TestMain(m *testing.M) {
-	dt.CreateTestDB()
-	db.Open()
-	mail.Open(os.Getenv("SMTP_URL"))
-	setupTestData()
-	code := m.Run()
-	mail.Close()
-	db.Close()
-	dt.DestroyTestDB()
-	os.Exit(code)
+var Data struct {
+	Users         []*model.User
+	Verifications []*model.Verification
 }
 
-var testData struct {
-	users         []*model.User
-	verifications []*model.Verification
-}
-
-func setupTestData() {
+func Setup() {
 	ctx := context.Background()
 
 	for i := 0; i <= 4; i++ {
@@ -50,7 +33,7 @@ func setupTestData() {
 			Status:   status,
 		})
 
-		testData.users = append(testData.users, u)
+		Data.Users = append(Data.Users, u)
 
 		if status == constant.UserStatusPendingVerification {
 			verification, _ := verification.CreateVerification(ctx, &model.CreateVerificationRequest{
@@ -58,7 +41,7 @@ func setupTestData() {
 				ExpiresAt: time.Now().Add(15 * time.Minute),
 			})
 
-			testData.verifications = append(testData.verifications, verification)
+			Data.Verifications = append(Data.Verifications, verification)
 		}
 	}
 }

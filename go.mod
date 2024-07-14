@@ -8,9 +8,10 @@ require (
 	github.com/appleboy/graceful v1.1.1
 	github.com/caitlinelfring/go-env-default v1.1.0
 	github.com/go-faker/faker/v4 v4.4.2
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/steinfletcher/apitest-jsonpath v1.7.2
 	github.com/swaggest/openapi-go v0.2.53
-	github.com/ukasyah-dev/common v0.0.5
+	github.com/ukasyah-dev/common v0.0.6
 	gorm.io/gorm v1.25.11
 )
 

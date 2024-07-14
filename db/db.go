@@ -21,6 +21,7 @@ func Open() {
 	err = DB.AutoMigrate(
 		&model.User{},
 		&model.Verification{},
+		&model.Session{},
 	)
 	if err != nil {
 		panic(err)
