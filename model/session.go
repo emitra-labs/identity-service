@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	commonModel "github.com/ukasyah-dev/common/model"
+)
 
 type Session struct {
 	ID        string    `gorm:"primaryKey" json:"id" example:"iksMPzcgzo4BvRiDycM74L"`
@@ -17,12 +21,30 @@ type CreateSessionRequest struct {
 	ExpiresAt time.Time `validate:"required"`
 }
 
-type DeleteOldSessionsRequest struct {
+type GetSessionsRequest struct {
+	commonModel.PaginationRequest
 	UserID string `validate:"required"`
 }
 
+type GetCurrentUserSessionsRequest struct {
+	commonModel.PaginationRequest
+}
+
+type GetSessionsResponse struct {
+	commonModel.PaginationResponse
+	Data []*Session `json:"data"`
+}
+
 type GetSessionRequest struct {
-	ID     string `params:"id" path:"id" validate:"required_without=Token,required_without=UserID"`
+	ID     string `validate:"required_without=Token,required_without=UserID"`
 	Token  string `validate:"required_without=ID"`
 	UserID string `validate:"required_without=ID"`
+}
+
+type GetCurrentUserSession struct {
+	ID string `params:"sessionId" path:"sessionId"`
+}
+
+type DeleteOldSessionsRequest struct {
+	UserID string `validate:"required"`
 }

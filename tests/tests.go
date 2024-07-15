@@ -46,19 +46,21 @@ func Setup() {
 		Data.Users = append(Data.Users, u)
 
 		if status == constant.UserStatusActive {
+			s, _ := session.CreateSession(ctx, &model.CreateSessionRequest{
+				UserID:    u.ID,
+				ExpiresAt: time.Now().AddDate(0, 0, 1),
+			})
+			Data.Sessions = append(Data.Sessions, s)
+
 			accessToken, _ := commonAuth.GenerateAccessToken(jwtPrivateKey, commonAuth.Claims{
-				UserID: u.ID,
+				SessionID: s.ID,
+				UserID:    u.ID,
 				RegisteredClaims: jwt.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Minute)),
 				},
 			})
 			Data.AccessTokens = append(Data.AccessTokens, accessToken)
 
-			s, _ := session.CreateSession(ctx, &model.CreateSessionRequest{
-				UserID:    u.ID,
-				ExpiresAt: time.Now().AddDate(0, 0, 1),
-			})
-			Data.Sessions = append(Data.Sessions, s)
 		} else if status == constant.UserStatusPendingVerification {
 			verification, _ := verification.CreateVerification(ctx, &model.CreateVerificationRequest{
 				UserID:    u.ID,
