@@ -16,8 +16,8 @@ cat public_key.pem | base64
 # Create .env file, update its content
 cp .env.example .env
 
-# Load .env file and run the program
-godotenv go run .
+# Run the program
+make run
 ```
 
 ## Features

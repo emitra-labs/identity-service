@@ -68,13 +68,14 @@ func SignIn(ctx context.Context, req *model.SignInRequest) (*model.SignInRespons
 	}
 
 	return &model.SignInResponse{
-		Access: model.Access{
+		Access: &model.Access{
 			Token:     accessToken,
 			ExpiresAt: accessExpiresAt,
 		},
-		Refresh: model.Refresh{
+		Refresh: &model.Refresh{
 			Token:     s.Token,
 			ExpiresAt: s.ExpiresAt,
 		},
+		User: u,
 	}, nil
 }

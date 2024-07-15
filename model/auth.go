@@ -24,6 +24,7 @@ type Refresh struct {
 }
 
 type SignInResponse struct {
-	Access  Access  `json:"access"`
-	Refresh Refresh `json:"refresh"`
+	Access  *Access  `json:"access,omitempty"`
+	Refresh *Refresh `json:"refresh,omitempty"`
+	User    *User    `json:"user,omitempty"`
 }
