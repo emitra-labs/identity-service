@@ -20,3 +20,9 @@ type CreateSessionRequest struct {
 type DeleteOldSessionsRequest struct {
 	UserID string `validate:"required"`
 }
+
+type GetSessionRequest struct {
+	ID     string `params:"id" path:"id" validate:"required_without=Token,required_without=UserID"`
+	Token  string `validate:"required_without=ID"`
+	UserID string `validate:"required_without=ID"`
+}

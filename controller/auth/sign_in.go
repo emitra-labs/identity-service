@@ -46,7 +46,7 @@ func SignIn(ctx context.Context, req *model.SignInRequest) (*model.SignInRespons
 		return nil, err
 	}
 
-	accessExpiresAt := time.Now().Add(30 * time.Minute)
+	accessExpiresAt := time.Now().Add(accessExpiresIn)
 
 	accessToken, err := auth.GenerateAccessToken(privateKey, auth.Claims{
 		UserID:     u.ID,

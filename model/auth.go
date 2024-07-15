@@ -28,3 +28,8 @@ type SignInResponse struct {
 	Refresh *Refresh `json:"refresh,omitempty"`
 	User    *User    `json:"user,omitempty"`
 }
+
+type RefreshTokenRequest struct {
+	Token  string `json:"token" validate:"required" example:""`
+	UserID string `json:"userID" validate:"required" example:""`
+}

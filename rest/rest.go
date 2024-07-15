@@ -59,6 +59,11 @@ func init() {
 		Description: "Sign in.",
 		Tags:        []string{"Auth"},
 	})
+	handler.Add(Server, http.MethodPost, "/auth/refresh", auth.RefreshToken, handler.Config{
+		Summary:     "Refresh token",
+		Description: "Generate new access token.",
+		Tags:        []string{"Auth"},
+	})
 
 	// User
 	handler.Add(Server, http.MethodGet, "/users/current", user.GetCurrentUser, handler.Config{

@@ -9,6 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	commonAuth "github.com/ukasyah-dev/common/auth"
 	"github.com/ukasyah-dev/identity-service/constant"
+	"github.com/ukasyah-dev/identity-service/controller/session"
 	"github.com/ukasyah-dev/identity-service/controller/user"
 	"github.com/ukasyah-dev/identity-service/controller/verification"
 	"github.com/ukasyah-dev/identity-service/model"
@@ -16,6 +17,7 @@ import (
 
 var Data struct {
 	AccessTokens  []string
+	Sessions      []*model.Session
 	Users         []*model.User
 	Verifications []*model.Verification
 }
@@ -41,7 +43,6 @@ func Setup() {
 			Password: "SuperSecret",
 			Status:   status,
 		})
-
 		Data.Users = append(Data.Users, u)
 
 		if status == constant.UserStatusActive {
@@ -51,14 +52,18 @@ func Setup() {
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Minute)),
 				},
 			})
-
 			Data.AccessTokens = append(Data.AccessTokens, accessToken)
+
+			s, _ := session.CreateSession(ctx, &model.CreateSessionRequest{
+				UserID:    u.ID,
+				ExpiresAt: time.Now().AddDate(0, 0, 1),
+			})
+			Data.Sessions = append(Data.Sessions, s)
 		} else if status == constant.UserStatusPendingVerification {
 			verification, _ := verification.CreateVerification(ctx, &model.CreateVerificationRequest{
 				UserID:    u.ID,
 				ExpiresAt: time.Now().Add(15 * time.Minute),
 			})
-
 			Data.Verifications = append(Data.Verifications, verification)
 		}
 	}

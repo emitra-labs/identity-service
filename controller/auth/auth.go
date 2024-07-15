@@ -3,10 +3,12 @@ package auth
 import (
 	"crypto"
 	"os"
+	"time"
 
 	"github.com/ukasyah-dev/common/auth"
 )
 
+var accessExpiresIn = 30 * time.Minute
 var privateKey crypto.PrivateKey
 
 func init() {
