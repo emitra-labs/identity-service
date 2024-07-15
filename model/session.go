@@ -45,6 +45,10 @@ type GetCurrentUserSession struct {
 	ID string `params:"sessionId" path:"sessionId"`
 }
 
+type DeleteSessionRequest struct {
+	ID string `validate:"required"`
+}
+
 type DeleteOldSessionsRequest struct {
 	UserID string `validate:"required"`
 }

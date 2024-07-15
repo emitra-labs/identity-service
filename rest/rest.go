@@ -52,7 +52,7 @@ func init() {
 	// Auth
 	handler.Add(Server, http.MethodPost, "/auth/sign-up", auth.SignUp, handler.Config{
 		Summary:     "Sign up",
-		Description: "Sign up for a new user account",
+		Description: "Signing up for a new user account. The user need to verify their email afterward.",
 		Tags:        []string{"Auth"},
 	})
 	handler.Add(Server, http.MethodPost, "/auth/sign-in", auth.SignIn, handler.Config{
@@ -62,8 +62,14 @@ func init() {
 	})
 	handler.Add(Server, http.MethodPost, "/auth/refresh", auth.RefreshToken, handler.Config{
 		Summary:     "Refresh token",
-		Description: "Generate new access token",
+		Description: "Refreshing the token will generate new tokens. Typically, you will need to do this when your access token has expired.",
 		Tags:        []string{"Auth"},
+	})
+	handler.Add(Server, http.MethodPost, "/auth/sign-out", auth.SignOut, handler.Config{
+		Summary:      "Sign out",
+		Description:  "Signing out will delete the current user session, so refreshing the token will no longer be possible.",
+		Tags:         []string{"Auth"},
+		Authenticate: true,
 	})
 
 	// Session

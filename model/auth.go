@@ -31,5 +31,5 @@ type SignInResponse struct {
 
 type RefreshTokenRequest struct {
 	Token  string `json:"token" validate:"required" example:""`
-	UserID string `json:"userID" validate:"required" example:""`
+	UserID string `json:"userId" validate:"required" example:""`
 }

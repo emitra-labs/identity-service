@@ -5,25 +5,22 @@ import (
 
 	"github.com/ukasyah-dev/common/errors"
 	"github.com/ukasyah-dev/common/log"
-	commonModel "github.com/ukasyah-dev/common/model"
-	"github.com/ukasyah-dev/common/validator"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
 )
 
-func DeleteOldSessions(ctx context.Context, req *model.DeleteOldSessionsRequest) (*commonModel.Empty, error) {
-	if err := validator.Validate(req); err != nil {
+func DeleteSession(ctx context.Context, req *model.DeleteSessionRequest) (*model.Session, error) {
+	s, err := GetSession(ctx, &model.GetSessionRequest{
+		ID: req.ID,
+	})
+	if err != nil {
 		return nil, err
 	}
 
-	// Delete old sessions, preserve 3 newest
-	sql := `DELETE FROM sessions WHERE user_id = ? AND id NOT IN (
-		SELECT id FROM sessions WHERE user_id = ? ORDER BY created_at DESC LIMIT 3
-	)`
-	if err := db.DB.Exec(sql, req.UserID, req.UserID).Error; err != nil {
-		log.Errorf("Failed to delete old sessions: %s", err)
+	if err := db.DB.Delete(s).Error; err != nil {
+		log.Errorf("Failed to delete session: %s", err)
 		return nil, errors.Internal()
 	}
 
-	return &commonModel.Empty{}, nil
+	return s, nil
 }
