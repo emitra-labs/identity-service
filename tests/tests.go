@@ -38,10 +38,11 @@ func Setup() {
 		}
 
 		u, _ := user.CreateUser(ctx, &model.CreateUserRequest{
-			Name:     faker.Name(),
-			Email:    faker.Email(),
-			Password: "SuperSecret",
-			Status:   status,
+			Name:       faker.Name(),
+			Email:      faker.Email(),
+			Password:   "SuperSecret",
+			Status:     status,
+			SuperAdmin: i == 0,
 		})
 		Data.Users = append(Data.Users, u)
 
@@ -53,8 +54,9 @@ func Setup() {
 			Data.Sessions = append(Data.Sessions, s)
 
 			accessToken, _ := commonAuth.GenerateAccessToken(jwtPrivateKey, commonAuth.Claims{
-				SessionID: s.ID,
-				UserID:    u.ID,
+				SessionID:  s.ID,
+				SuperAdmin: u.SuperAdmin,
+				UserID:     u.ID,
 				RegisteredClaims: jwt.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Minute)),
 				},

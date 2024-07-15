@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	commonModel "github.com/ukasyah-dev/common/model"
+)
 
 type User struct {
 	ID         string    `gorm:"primaryKey" json:"id" example:"h8WpMrLeTA7mgyDGCtEkiX"`
@@ -19,6 +23,15 @@ type CreateUserRequest struct {
 	Password   string `json:"password" validate:"required,gte=8,lte=64" example:"SuperSecret"`
 	Status     string `json:"status" example:"active"`
 	SuperAdmin bool   `json:"-"`
+}
+
+type GetUsersRequest struct {
+	commonModel.PaginationRequest
+}
+
+type GetUsersResponse struct {
+	commonModel.PaginationResponse
+	Data []*User `json:"data"`
 }
 
 type GetUserRequest struct {

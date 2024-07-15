@@ -11,7 +11,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/steinfletcher/apitest-jsonpath v1.7.2
 	github.com/swaggest/openapi-go v0.2.53
-	github.com/ukasyah-dev/common v0.0.8
+	github.com/ukasyah-dev/common v0.0.9
 	gorm.io/gorm v1.25.11
 )
 
@@ -62,7 +62,7 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rs/zerolog v1.33.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/samber/lo v1.45.0 // indirect
+	github.com/samber/lo v1.46.0 // indirect
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/steinfletcher/apitest v1.5.16 // indirect
 	github.com/swaggest/jsonschema-go v0.3.72 // indirect

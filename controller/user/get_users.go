@@ -1,4 +1,4 @@
-package session
+package user
 
 import (
 	"context"
@@ -9,21 +9,19 @@ import (
 	"github.com/ukasyah-dev/identity-service/model"
 )
 
-func GetSessions(ctx context.Context, req *model.GetSessionsRequest) (*model.GetSessionsResponse, error) {
+func GetUsers(ctx context.Context, req *model.GetUsersRequest) (*model.GetUsersResponse, error) {
 	if err := validator.Validate(req); err != nil {
 		return nil, err
 	}
 
-	tx := db.DB.WithContext(ctx).
-		Model(&model.Session{}).
-		Where("user_id = ?", req.UserID)
+	tx := db.DB.WithContext(ctx).Model(&model.User{})
 
-	data, pagination, err := paginator.Paginate[model.Session](tx, &req.PaginationRequest)
+	data, pagination, err := paginator.Paginate[model.User](tx, &req.PaginationRequest)
 	if err != nil {
 		return nil, err
 	}
 
-	return &model.GetSessionsResponse{
+	return &model.GetUsersResponse{
 		PaginationResponse: *pagination,
 		Data:               data,
 	}, nil

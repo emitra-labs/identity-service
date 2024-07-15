@@ -93,6 +93,12 @@ func init() {
 	})
 
 	// User
+	handler.Add(Server, http.MethodGet, "/users", user.GetUsers, handler.Config{
+		Summary:     "Get users",
+		Description: "Retrive all users. You must be a super admin to access this resource.",
+		Tags:        []string{"User"},
+		SuperAdmin:  true,
+	})
 	handler.Add(Server, http.MethodGet, "/users/current", user.GetCurrentUser, handler.Config{
 		Summary:      "Get current user",
 		Description:  "Get current user",
