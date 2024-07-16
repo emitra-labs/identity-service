@@ -48,6 +48,12 @@ type UpdateUserRequest struct {
 	Status   string `json:"status" validate:"omitempty,oneof=inactive active" example:"active"`
 }
 
+type UpdateCurrentUserRequest struct {
+	Email    string `json:"email" example:"user@example.com"`
+	Name     string `json:"name" example:"User"`
+	Password string `json:"password" example:"RahasiaDong"`
+}
+
 type DeleteUserRequest struct {
 	ID string `params:"userId" path:"userId" validate:"required" example:""`
 }

@@ -117,11 +117,23 @@ func init() {
 		Tags:        []string{"User"},
 		SuperAdmin:  true,
 	})
+	handler.Add(Server, http.MethodPatch, "/users/current", user.UpdateCurrentUser, handler.Config{
+		Summary:      "Update current user",
+		Description:  "Update current user",
+		Tags:         []string{"User"},
+		Authenticate: true,
+	})
 	handler.Add(Server, http.MethodPatch, "/users/:userId", user.UpdateUser, handler.Config{
 		Summary:     "Update a user",
 		Description: "Update a user. You must be a super admin to access this resource.",
 		Tags:        []string{"User"},
 		SuperAdmin:  true,
+	})
+	handler.Add(Server, http.MethodDelete, "/users/current", user.DeleteCurrentUser, handler.Config{
+		Summary:      "Delete current user",
+		Description:  "Delete current user",
+		Tags:         []string{"User"},
+		Authenticate: true,
 	})
 	handler.Add(Server, http.MethodDelete, "/users/:userId", user.DeleteUser, handler.Config{
 		Summary:     "Delete a user",
