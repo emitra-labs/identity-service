@@ -93,6 +93,12 @@ func init() {
 	})
 
 	// User
+	handler.Add(Server, http.MethodPost, "/users", user.CreateUser, handler.Config{
+		Summary:     "Create user",
+		Description: "Create a new user. You must be a super admin to access this resource.",
+		Tags:        []string{"User"},
+		SuperAdmin:  true,
+	})
 	handler.Add(Server, http.MethodGet, "/users", user.GetUsers, handler.Config{
 		Summary:     "Get users",
 		Description: "Retrive all users. You must be a super admin to access this resource.",
@@ -104,6 +110,24 @@ func init() {
 		Description:  "Get current user",
 		Tags:         []string{"User"},
 		Authenticate: true,
+	})
+	handler.Add(Server, http.MethodGet, "/users/:userId", user.GetUser, handler.Config{
+		Summary:     "Get user",
+		Description: "Retrive a user. You must be a super admin to access this resource.",
+		Tags:        []string{"User"},
+		SuperAdmin:  true,
+	})
+	handler.Add(Server, http.MethodPatch, "/users/:userId", user.UpdateUser, handler.Config{
+		Summary:     "Update a user",
+		Description: "Update a user. You must be a super admin to access this resource.",
+		Tags:        []string{"User"},
+		SuperAdmin:  true,
+	})
+	handler.Add(Server, http.MethodDelete, "/users/:userId", user.DeleteUser, handler.Config{
+		Summary:     "Delete a user",
+		Description: "Delete a user. You must be a super admin to access this resource.",
+		Tags:        []string{"User"},
+		SuperAdmin:  true,
 	})
 
 	// Verification

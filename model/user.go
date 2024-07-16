@@ -35,7 +35,19 @@ type GetUsersResponse struct {
 }
 
 type GetUserRequest struct {
-	ID     string `params:"id" path:"id" validate:"required_without=Email"`
+	ID     string `params:"userId" path:"userId" validate:"required_without=Email"`
 	Email  string `validate:"required_without=ID"`
 	Status string
+}
+
+type UpdateUserRequest struct {
+	ID       string `params:"userId" path:"userId" validate:"required" example:""`
+	Email    string `json:"email" validate:"omitempty,email,lte=30" example:"user@example.com"`
+	Name     string `json:"name" validate:"omitempty,lte=30" example:"User"`
+	Password string `json:"password" validate:"omitempty,gte=8,lte=64" example:"RahasiaDong"`
+	Status   string `json:"status" validate:"omitempty,oneof=inactive active" example:"active"`
+}
+
+type DeleteUserRequest struct {
+	ID string `params:"userId" path:"userId" validate:"required" example:""`
 }
