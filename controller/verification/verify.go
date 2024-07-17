@@ -46,6 +46,6 @@ func Verify(ctx context.Context, req *model.VerifyRequest) (*commonModel.BasicRe
 	}
 
 	return &commonModel.BasicResponse{
-		Message: "Your account has been verified.",
+		Message: "Your account is verified successfully.",
 	}, nil
 }
