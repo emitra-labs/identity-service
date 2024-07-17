@@ -6,6 +6,7 @@ import (
 
 	"github.com/appleboy/graceful"
 	"github.com/caitlinelfring/go-env-default"
+	"github.com/ukasyah-dev/common/amqp"
 	"github.com/ukasyah-dev/common/mail"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/rest"
@@ -14,6 +15,8 @@ import (
 var port = env.GetIntDefault("PORT", 3000)
 
 func init() {
+	amqp.Open(os.Getenv("AMQP_URL"))
+	amqp.DeclareQueues("user-mutation")
 	db.Open()
 	mail.Open(os.Getenv("SMTP_URL"))
 }
@@ -35,6 +38,10 @@ func main() {
 
 	m.AddShutdownJob(func() error {
 		return db.Close()
+	})
+
+	m.AddShutdownJob(func() error {
+		return amqp.Close()
 	})
 
 	<-m.Done()

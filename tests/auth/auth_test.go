@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/ukasyah-dev/common/amqp"
 	dt "github.com/ukasyah-dev/common/db/testkit"
 	"github.com/ukasyah-dev/common/mail"
 	"github.com/ukasyah-dev/identity-service/db"
@@ -11,6 +12,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	amqp.Open(os.Getenv("AMQP_URL"))
 	dt.CreateTestDB()
 	db.Open()
 	mail.Open(os.Getenv("SMTP_URL"))
@@ -18,6 +20,7 @@ func TestMain(m *testing.M) {
 
 	code := m.Run()
 
+	amqp.Close()
 	mail.Close()
 	db.Close()
 	dt.DestroyTestDB()
