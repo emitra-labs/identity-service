@@ -8,6 +8,7 @@ import (
 	"github.com/ukasyah-dev/common/log"
 	commonModel "github.com/ukasyah-dev/common/model"
 	"github.com/ukasyah-dev/identity-service/constant"
+	"github.com/ukasyah-dev/identity-service/controller/user"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
 	"gorm.io/gorm"
@@ -32,9 +33,11 @@ func Verify(ctx context.Context, req *model.VerifyRequest) (*commonModel.BasicRe
 	}
 
 	// Set user status to active
-	verification.User.Status = constant.UserStatusActive
-	if err := db.DB.Save(verification.User).Error; err != nil {
-		log.Errorf("Failed to update user status: %s", err)
+	_, err = user.UpdateUser(ctx, &model.UpdateUserRequest{
+		ID:     verification.UserID,
+		Status: constant.UserStatusActive,
+	})
+	if err != nil {
 		return nil, err
 	}
 
