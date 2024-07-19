@@ -36,6 +36,7 @@ func Setup() {
 	dt.CreateTestDB()
 	db.Open()
 	mail.Open(os.Getenv("SMTP_URL"))
+	os.Setenv("SKIP_AMQP_PUBLISHING", "true")
 	RESTServer = rest.NewServer()
 
 	ctx := context.Background()
