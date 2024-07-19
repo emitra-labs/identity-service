@@ -2,7 +2,9 @@ name: Deploy
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
+  release:
+    types: ["published"]
 
 jobs:
   build:
@@ -15,6 +17,7 @@ jobs:
   deploy:
     uses: ukasyah-dev/actions/.github/workflows/deploy-docker.yaml@main
     needs: build
+    if: github.event_name == "push"
     permissions:
       contents: read
     secrets: inherit
