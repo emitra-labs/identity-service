@@ -7,11 +7,15 @@ import (
 
 	"github.com/go-faker/faker/v4"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/ukasyah-dev/common/amqp"
 	commonAuth "github.com/ukasyah-dev/common/auth"
+	dt "github.com/ukasyah-dev/common/db/testkit"
+	"github.com/ukasyah-dev/common/mail"
 	"github.com/ukasyah-dev/identity-service/constant"
 	"github.com/ukasyah-dev/identity-service/controller/session"
 	"github.com/ukasyah-dev/identity-service/controller/user"
 	"github.com/ukasyah-dev/identity-service/controller/verification"
+	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
 )
 
@@ -23,6 +27,12 @@ var Data struct {
 }
 
 func Setup() {
+	amqp.Open(os.Getenv("AMQP_URL"))
+	amqp.DeclareQueues("user-mutation")
+	dt.CreateTestDB()
+	db.Open()
+	mail.Open(os.Getenv("SMTP_URL"))
+
 	ctx := context.Background()
 
 	jwtPrivateKey, err := commonAuth.ParsePrivateKeyFromBase64(os.Getenv("BASE64_JWT_PRIVATE_KEY"))
@@ -71,4 +81,11 @@ func Setup() {
 			Data.Verifications = append(Data.Verifications, verification)
 		}
 	}
+}
+
+func Teardown() {
+	amqp.Close()
+	mail.Close()
+	db.Close()
+	dt.DestroyTestDB()
 }

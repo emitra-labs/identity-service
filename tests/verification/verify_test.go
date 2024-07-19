@@ -21,6 +21,6 @@ func TestVerify_Success(t *testing.T) {
 		}).
 		Expect(t).
 		Status(http.StatusOK).
-		Assert(jsonpath.Contains("$.message", "Your account has been verified")).
+		Assert(jsonpath.Contains("$.message", "Your account is verified successfully.")).
 		End()
 }
