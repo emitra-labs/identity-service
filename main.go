@@ -22,14 +22,16 @@ func init() {
 }
 
 func main() {
+	s := rest.NewServer()
+
 	m := graceful.NewManager()
 
 	m.AddRunningJob(func(ctx context.Context) error {
-		return rest.Server.Start(port)
+		return s.Start(port)
 	})
 
 	m.AddShutdownJob(func() error {
-		return rest.Server.Shutdown()
+		return s.Shutdown()
 	})
 
 	m.AddShutdownJob(func() error {

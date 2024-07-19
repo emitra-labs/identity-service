@@ -5,12 +5,11 @@ import (
 	"testing"
 
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestDeleteCurrentUser_Success(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Delete("/users/current").
 		Header("Authorization", "Bearer "+tests.Data.AccessTokens[2]).
 		Expect(t).

@@ -7,12 +7,11 @@ import (
 	"github.com/go-faker/faker/v4"
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestSignUp_Success(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/auth/sign-up").
 		JSON(map[string]any{
 			"name":     faker.Name(),
@@ -26,7 +25,7 @@ func TestSignUp_Success(t *testing.T) {
 }
 
 func TestSignUp_EmailExists(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/auth/sign-up").
 		JSON(map[string]any{
 			"name":     faker.Name(),

@@ -7,12 +7,11 @@ import (
 	"github.com/go-faker/faker/v4"
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestSignIn_Success(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/auth/sign-in").
 		JSON(map[string]any{
 			"email":    tests.Data.Users[0].Email,
@@ -25,7 +24,7 @@ func TestSignIn_Success(t *testing.T) {
 }
 
 func TestSignIn_InvalidEmailOrPassword(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/auth/sign-in").
 		JSON(map[string]any{
 			"email":    faker.Email(),
@@ -36,7 +35,7 @@ func TestSignIn_InvalidEmailOrPassword(t *testing.T) {
 		Assert(jsonpath.Contains("$.error", "Invalid email or password")).
 		End()
 
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/auth/sign-in").
 		JSON(map[string]any{
 			"email":    tests.Data.Users[1].Email,

@@ -7,12 +7,11 @@ import (
 	"github.com/go-faker/faker/v4"
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestCreateUser_Success(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/users").
 		Header("Authorization", "Bearer "+tests.Data.AccessTokens[0]).
 		JSON(map[string]any{

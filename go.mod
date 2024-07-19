@@ -11,7 +11,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/steinfletcher/apitest-jsonpath v1.7.2
 	github.com/swaggest/openapi-go v0.2.53
-	github.com/ukasyah-dev/common v0.0.11
+	github.com/ukasyah-dev/common v0.0.13
 	gorm.io/gorm v1.25.11
 )
 
@@ -70,6 +70,7 @@ require (
 	github.com/swaggest/refl v1.3.0 // indirect
 	github.com/toorop/go-dkim v0.0.0-20240103092955-90b7d1423f92 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
+	github.com/ukasyah-dev/pb v0.0.0-20240719072450-1acd76e5ed6a // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.55.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
@@ -82,6 +83,9 @@ require (
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240711142825-46eb208f015d // indirect
+	google.golang.org/grpc v1.65.0 // indirect
+	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/postgres v1.5.9 // indirect
 )

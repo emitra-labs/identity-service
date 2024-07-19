@@ -7,7 +7,6 @@ import (
 	"github.com/go-faker/faker/v4"
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
@@ -16,7 +15,7 @@ func TestUpdateUser_Success(t *testing.T) {
 		"name": faker.Name(),
 	}
 
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Patch("/users/"+tests.Data.Users[4].ID).
 		Header("Authorization", "Bearer "+tests.Data.AccessTokens[0]).
 		JSON(data).

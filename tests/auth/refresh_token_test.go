@@ -6,12 +6,11 @@ import (
 
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestRefreshToken_Success(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/auth/refresh").
 		JSON(map[string]any{
 			"token":  tests.Data.Sessions[1].Token,

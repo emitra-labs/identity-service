@@ -6,14 +6,13 @@ import (
 
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestVerify_Success(t *testing.T) {
 	verification := tests.Data.Verifications[0]
 
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Post("/verify").
 		JSON(map[string]any{
 			"userId": verification.UserID,

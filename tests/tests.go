@@ -11,12 +11,14 @@ import (
 	commonAuth "github.com/ukasyah-dev/common/auth"
 	dt "github.com/ukasyah-dev/common/db/testkit"
 	"github.com/ukasyah-dev/common/mail"
+	restServer "github.com/ukasyah-dev/common/rest/server"
 	"github.com/ukasyah-dev/identity-service/constant"
 	"github.com/ukasyah-dev/identity-service/controller/session"
 	"github.com/ukasyah-dev/identity-service/controller/user"
 	"github.com/ukasyah-dev/identity-service/controller/verification"
 	"github.com/ukasyah-dev/identity-service/db"
 	"github.com/ukasyah-dev/identity-service/model"
+	"github.com/ukasyah-dev/identity-service/rest"
 )
 
 var Data struct {
@@ -26,12 +28,15 @@ var Data struct {
 	Verifications []*model.Verification
 }
 
+var RESTServer *restServer.Server
+
 func Setup() {
 	amqp.Open(os.Getenv("AMQP_URL"))
 	amqp.DeclareQueues("user-mutation")
 	dt.CreateTestDB()
 	db.Open()
 	mail.Open(os.Getenv("SMTP_URL"))
+	RESTServer = rest.NewServer()
 
 	ctx := context.Background()
 

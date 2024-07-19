@@ -6,12 +6,11 @@ import (
 
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
 	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/rest"
 	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestGetCurrentUserSessions_Success(t *testing.T) {
-	testkit.New(rest.Server).
+	testkit.New(tests.RESTServer).
 		Get("/users/current/sessions").
 		Header("Authorization", "Bearer "+tests.Data.AccessTokens[1]).
 		Expect(t).
