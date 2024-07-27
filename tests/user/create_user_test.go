@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/emitra-labs/common/rest/testkit"
+	"github.com/emitra-labs/identity-service/tests"
 	"github.com/go-faker/faker/v4"
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
-	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestCreateUser_Success(t *testing.T) {

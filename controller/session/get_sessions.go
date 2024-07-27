@@ -3,10 +3,10 @@ package session
 import (
 	"context"
 
-	"github.com/ukasyah-dev/common/paginator"
-	"github.com/ukasyah-dev/common/validator"
-	"github.com/ukasyah-dev/identity-service/db"
-	"github.com/ukasyah-dev/identity-service/model"
+	"github.com/emitra-labs/common/paginator"
+	"github.com/emitra-labs/common/validator"
+	"github.com/emitra-labs/identity-service/db"
+	"github.com/emitra-labs/identity-service/model"
 )
 
 func GetSessions(ctx context.Context, req *model.GetSessionsRequest) (*model.GetSessionsResponse, error) {

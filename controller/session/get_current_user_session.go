@@ -3,7 +3,7 @@ package session
 import (
 	"context"
 
-	"github.com/ukasyah-dev/identity-service/model"
+	"github.com/emitra-labs/identity-service/model"
 )
 
 func GetCurrentUserSession(ctx context.Context, req *model.GetCurrentUserSession) (*model.Session, error) {

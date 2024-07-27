@@ -3,13 +3,13 @@ package verification
 import (
 	"context"
 
-	"github.com/ukasyah-dev/common/errors"
-	"github.com/ukasyah-dev/common/id"
-	"github.com/ukasyah-dev/common/log"
-	"github.com/ukasyah-dev/common/validator"
-	"github.com/ukasyah-dev/identity-service/constant"
-	"github.com/ukasyah-dev/identity-service/db"
-	"github.com/ukasyah-dev/identity-service/model"
+	"github.com/emitra-labs/common/errors"
+	"github.com/emitra-labs/common/id"
+	"github.com/emitra-labs/common/log"
+	"github.com/emitra-labs/common/validator"
+	"github.com/emitra-labs/identity-service/constant"
+	"github.com/emitra-labs/identity-service/db"
+	"github.com/emitra-labs/identity-service/model"
 )
 
 func CreateVerification(ctx context.Context, req *model.CreateVerificationRequest) (*model.Verification, error) {

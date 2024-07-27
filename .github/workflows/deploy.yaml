@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  push:
+    branches: ['main']
+  release:
+    types: ['published']
+
+jobs:
+  build:
+    uses: emitra-labs/actions/.github/workflows/build-go.yaml@main
+    permissions:
+      contents: read
+      packages: write
+    secrets: inherit
+  
+  # deploy:
+  #   uses: emitra-labs/actions/.github/workflows/deploy-kubernetes.yaml@main
+  #   needs: build
+  #   if: github.event_name == 'push'
+  #   permissions:
+  #     contents: read
+  #   secrets: inherit

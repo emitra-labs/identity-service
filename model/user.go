@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	commonModel "github.com/ukasyah-dev/common/model"
+	commonModel "github.com/emitra-labs/common/model"
 )
 
 type User struct {

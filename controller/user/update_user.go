@@ -4,15 +4,15 @@ import (
 	"context"
 	"os"
 
-	"github.com/ukasyah-dev/common/amqp"
-	commonConstant "github.com/ukasyah-dev/common/constant"
-	"github.com/ukasyah-dev/common/errors"
-	"github.com/ukasyah-dev/common/hash"
-	"github.com/ukasyah-dev/common/log"
-	commonModel "github.com/ukasyah-dev/common/model"
-	"github.com/ukasyah-dev/common/validator"
-	"github.com/ukasyah-dev/identity-service/db"
-	"github.com/ukasyah-dev/identity-service/model"
+	"github.com/emitra-labs/common/amqp"
+	commonConstant "github.com/emitra-labs/common/constant"
+	"github.com/emitra-labs/common/errors"
+	"github.com/emitra-labs/common/hash"
+	"github.com/emitra-labs/common/log"
+	commonModel "github.com/emitra-labs/common/model"
+	"github.com/emitra-labs/common/validator"
+	"github.com/emitra-labs/identity-service/db"
+	"github.com/emitra-labs/identity-service/model"
 )
 
 func UpdateUser(ctx context.Context, req *model.UpdateUserRequest) (*model.User, error) {

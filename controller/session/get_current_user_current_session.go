@@ -3,9 +3,9 @@ package session
 import (
 	"context"
 
-	commonConstant "github.com/ukasyah-dev/common/constant"
-	commonModel "github.com/ukasyah-dev/common/model"
-	"github.com/ukasyah-dev/identity-service/model"
+	commonConstant "github.com/emitra-labs/common/constant"
+	commonModel "github.com/emitra-labs/common/model"
+	"github.com/emitra-labs/identity-service/model"
 )
 
 func GetCurrentUserCurrentSession(ctx context.Context, req *commonModel.Empty) (*model.Session, error) {

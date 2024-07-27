@@ -3,8 +3,8 @@ package db
 import (
 	"os"
 
-	"github.com/ukasyah-dev/common/db/pool"
-	"github.com/ukasyah-dev/identity-service/model"
+	"github.com/emitra-labs/common/db/pool"
+	"github.com/emitra-labs/identity-service/model"
 	"gorm.io/gorm"
 )
 

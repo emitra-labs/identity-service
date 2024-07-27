@@ -3,8 +3,8 @@ package controller
 import (
 	"context"
 
-	commonModel "github.com/ukasyah-dev/common/model"
-	"github.com/ukasyah-dev/identity-service/model"
+	commonModel "github.com/emitra-labs/common/model"
+	"github.com/emitra-labs/identity-service/model"
 )
 
 func HealthCheck(ctx context.Context, req *commonModel.Empty) (*model.Health, error) {

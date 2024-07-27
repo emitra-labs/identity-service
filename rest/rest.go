@@ -4,14 +4,14 @@ import (
 	"net/http"
 	"os"
 
+	commonAuth "github.com/emitra-labs/common/auth"
+	"github.com/emitra-labs/common/rest/handler"
+	"github.com/emitra-labs/common/rest/server"
+	"github.com/emitra-labs/identity-service/controller"
+	"github.com/emitra-labs/identity-service/controller/session"
+	"github.com/emitra-labs/identity-service/controller/user"
+	"github.com/emitra-labs/identity-service/controller/verification"
 	"github.com/swaggest/openapi-go/openapi31"
-	commonAuth "github.com/ukasyah-dev/common/auth"
-	"github.com/ukasyah-dev/common/rest/handler"
-	"github.com/ukasyah-dev/common/rest/server"
-	"github.com/ukasyah-dev/identity-service/controller/auth"
-	"github.com/ukasyah-dev/identity-service/controller/session"
-	"github.com/ukasyah-dev/identity-service/controller/user"
-	"github.com/ukasyah-dev/identity-service/controller/verification"
 )
 
 func NewServer() *server.Server {
@@ -43,22 +43,22 @@ func NewServer() *server.Server {
 	handler.AddHealthCheck(s)
 
 	// Auth
-	handler.Add(s, http.MethodPost, "/auth/sign-up", auth.SignUp, handler.Config{
+	handler.Add(s, http.MethodPost, "/auth/sign-up", controller.SignUp, handler.Config{
 		Summary:     "Sign up",
 		Description: "Signing up for a new user account. The user need to verify their email afterward.",
 		Tags:        []string{"Auth"},
 	})
-	handler.Add(s, http.MethodPost, "/auth/sign-in", auth.SignIn, handler.Config{
+	handler.Add(s, http.MethodPost, "/auth/sign-in", controller.SignIn, handler.Config{
 		Summary:     "Sign in",
 		Description: "Sign in",
 		Tags:        []string{"Auth"},
 	})
-	handler.Add(s, http.MethodPost, "/auth/refresh", auth.RefreshToken, handler.Config{
+	handler.Add(s, http.MethodPost, "/auth/refresh", controller.RefreshToken, handler.Config{
 		Summary:     "Refresh token",
 		Description: "Refreshing the token will generate new tokens. Typically, you will need to do this when your access token has expired.",
 		Tags:        []string{"Auth"},
 	})
-	handler.Add(s, http.MethodPost, "/auth/sign-out", auth.SignOut, handler.Config{
+	handler.Add(s, http.MethodPost, "/auth/sign-out", controller.SignOut, handler.Config{
 		Summary:      "Sign out",
 		Description:  "Signing out will delete the current user session, so refreshing the token will no longer be possible.",
 		Tags:         []string{"Auth"},

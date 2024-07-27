@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/emitra-labs/common/rest/testkit"
+	"github.com/emitra-labs/identity-service/tests"
 	jsonpath "github.com/steinfletcher/apitest-jsonpath"
-	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/tests"
 )
 
 func TestSignOut_Success(t *testing.T) {

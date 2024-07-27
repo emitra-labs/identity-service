@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/ukasyah-dev/common/rest/testkit"
-	"github.com/ukasyah-dev/identity-service/tests"
+	"github.com/emitra-labs/common/rest/testkit"
+	"github.com/emitra-labs/identity-service/tests"
 )
 
 func TestDeleteCurrentUser_Success(t *testing.T) {

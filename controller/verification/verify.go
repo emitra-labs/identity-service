@@ -4,13 +4,13 @@ import (
 	"context"
 	e "errors"
 
-	"github.com/ukasyah-dev/common/errors"
-	"github.com/ukasyah-dev/common/log"
-	commonModel "github.com/ukasyah-dev/common/model"
-	"github.com/ukasyah-dev/identity-service/constant"
-	"github.com/ukasyah-dev/identity-service/controller/user"
-	"github.com/ukasyah-dev/identity-service/db"
-	"github.com/ukasyah-dev/identity-service/model"
+	"github.com/emitra-labs/common/errors"
+	"github.com/emitra-labs/common/log"
+	commonModel "github.com/emitra-labs/common/model"
+	"github.com/emitra-labs/identity-service/constant"
+	"github.com/emitra-labs/identity-service/controller/user"
+	"github.com/emitra-labs/identity-service/db"
+	"github.com/emitra-labs/identity-service/model"
 	"gorm.io/gorm"
 )
 

@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ukasyah-dev/identity-service/tests"
+	"github.com/emitra-labs/identity-service/tests"
 )
 
 func TestMain(m *testing.M) {

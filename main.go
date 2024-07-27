@@ -6,10 +6,10 @@ import (
 
 	"github.com/appleboy/graceful"
 	"github.com/caitlinelfring/go-env-default"
-	"github.com/ukasyah-dev/common/amqp"
-	"github.com/ukasyah-dev/common/mail"
-	"github.com/ukasyah-dev/identity-service/db"
-	"github.com/ukasyah-dev/identity-service/rest"
+	"github.com/emitra-labs/common/amqp"
+	"github.com/emitra-labs/common/mail"
+	"github.com/emitra-labs/identity-service/db"
+	"github.com/emitra-labs/identity-service/rest"
 )
 
 var port = env.GetIntDefault("PORT", 3000)
