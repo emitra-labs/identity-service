@@ -1,0 +1,21 @@
+name: Run integration tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: 
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  test:
+    uses: emitra-labs/actions/.github/workflows/test-go.yaml@main
+    permissions:
+      contents: read
+    with:
+      maildev: true
+      postgresql: true
+      rabbitmq: true
+    secrets: inherit

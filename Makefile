@@ -2,4 +2,4 @@ run:
 	godotenv go run .
 
 test:
-	godotenv go test -v -count=1 ./tests/...
+	SKIP_AMQP_PUBLISHING=true godotenv go test -v -count=1 ./tests

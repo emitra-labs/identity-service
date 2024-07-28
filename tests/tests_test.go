@@ -10,7 +10,6 @@ import (
 	commonAuth "github.com/emitra-labs/common/auth"
 	dt "github.com/emitra-labs/common/db/testkit"
 	"github.com/emitra-labs/common/mail"
-	rs "github.com/emitra-labs/common/rest/server"
 	"github.com/emitra-labs/identity-service/constant"
 	"github.com/emitra-labs/identity-service/controller"
 	"github.com/emitra-labs/identity-service/db"
@@ -27,7 +26,7 @@ var data struct {
 	verifications []*model.Verification
 }
 
-var restServer *rs.Server
+var restServer = rest.NewServer()
 
 func TestMain(m *testing.M) {
 	setup()
@@ -41,12 +40,10 @@ func setup() {
 	dt.CreateTestDB()
 	db.Open()
 	mail.Open(os.Getenv("SMTP_URL"))
-	os.Setenv("SKIP_AMQP_PUBLISHING", "true")
-	restServer = rest.NewServer()
 
 	ctx := context.Background()
 
-	jwtPrivateKey, err := commonAuth.ParsePrivateKeyFromBase64(os.Getenv("BASE64_JWT_PRIVATE_KEY"))
+	jwtPrivateKey, err := jwt.ParseEdPrivateKeyFromPEM([]byte(os.Getenv("JWT_PRIVATE_KEY")))
 	if err != nil {
 		panic(err)
 	}
