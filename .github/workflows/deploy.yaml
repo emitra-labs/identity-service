@@ -22,5 +22,4 @@ jobs:
       contents: read
     with:
       env-vars: true
-      http: true
     secrets: inherit
