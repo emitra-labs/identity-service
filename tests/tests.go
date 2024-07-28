@@ -3,17 +3,16 @@ package tests
 import (
 	"context"
 	"os"
+	"testing"
 	"time"
 
 	"github.com/emitra-labs/common/amqp"
 	commonAuth "github.com/emitra-labs/common/auth"
 	dt "github.com/emitra-labs/common/db/testkit"
 	"github.com/emitra-labs/common/mail"
-	restServer "github.com/emitra-labs/common/rest/server"
+	rs "github.com/emitra-labs/common/rest/server"
 	"github.com/emitra-labs/identity-service/constant"
-	"github.com/emitra-labs/identity-service/controller/session"
-	"github.com/emitra-labs/identity-service/controller/user"
-	"github.com/emitra-labs/identity-service/controller/verification"
+	"github.com/emitra-labs/identity-service/controller"
 	"github.com/emitra-labs/identity-service/db"
 	"github.com/emitra-labs/identity-service/model"
 	"github.com/emitra-labs/identity-service/rest"
@@ -21,23 +20,29 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var Data struct {
-	AccessTokens  []string
-	Sessions      []*model.Session
-	Users         []*model.User
-	Verifications []*model.Verification
+var data struct {
+	accessTokens  []string
+	sessions      []*model.Session
+	users         []*model.User
+	verifications []*model.Verification
 }
 
-var RESTServer *restServer.Server
+var restServer *rs.Server
 
-func Setup() {
+func TestMain(m *testing.M) {
+	setup()
+	defer teardown()
+	os.Exit(m.Run())
+}
+
+func setup() {
 	amqp.Open(os.Getenv("AMQP_URL"))
 	amqp.DeclareQueues("user-mutation")
 	dt.CreateTestDB()
 	db.Open()
 	mail.Open(os.Getenv("SMTP_URL"))
 	os.Setenv("SKIP_AMQP_PUBLISHING", "true")
-	RESTServer = rest.NewServer()
+	restServer = rest.NewServer()
 
 	ctx := context.Background()
 
@@ -53,43 +58,43 @@ func Setup() {
 			status = constant.UserStatusPendingVerification
 		}
 
-		u, _ := user.CreateUser(ctx, &model.CreateUserRequest{
+		user, _ := controller.CreateUser(ctx, &model.CreateUserRequest{
 			Name:       faker.Name(),
 			Email:      faker.Email(),
 			Password:   "SuperSecret",
 			Status:     status,
 			SuperAdmin: i == 0,
 		})
-		Data.Users = append(Data.Users, u)
+		data.users = append(data.users, user)
 
 		if status == constant.UserStatusActive {
-			s, _ := session.CreateSession(ctx, &model.CreateSessionRequest{
-				UserID:    u.ID,
+			session, _ := controller.CreateSession(ctx, &model.CreateSessionRequest{
+				UserID:    user.ID,
 				ExpiresAt: time.Now().AddDate(0, 0, 1),
 			})
-			Data.Sessions = append(Data.Sessions, s)
+			data.sessions = append(data.sessions, session)
 
 			accessToken, _ := commonAuth.GenerateAccessToken(jwtPrivateKey, commonAuth.Claims{
-				SessionID:  s.ID,
-				SuperAdmin: u.SuperAdmin,
-				UserID:     u.ID,
+				SessionID:  session.ID,
+				SuperAdmin: user.SuperAdmin,
+				UserID:     user.ID,
 				RegisteredClaims: jwt.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Minute)),
 				},
 			})
-			Data.AccessTokens = append(Data.AccessTokens, accessToken)
+			data.accessTokens = append(data.accessTokens, accessToken)
 
 		} else if status == constant.UserStatusPendingVerification {
-			verification, _ := verification.CreateVerification(ctx, &model.CreateVerificationRequest{
-				UserID:    u.ID,
+			verification, _ := controller.CreateVerification(ctx, &model.CreateVerificationRequest{
+				UserID:    user.ID,
 				ExpiresAt: time.Now().Add(15 * time.Minute),
 			})
-			Data.Verifications = append(Data.Verifications, verification)
+			data.verifications = append(data.verifications, verification)
 		}
 	}
 }
 
-func Teardown() {
+func teardown() {
 	amqp.Close()
 	mail.Close()
 	db.Close()

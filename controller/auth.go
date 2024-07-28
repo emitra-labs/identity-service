@@ -16,9 +16,6 @@ import (
 	commonModel "github.com/emitra-labs/common/model"
 	"github.com/emitra-labs/common/validator"
 	"github.com/emitra-labs/identity-service/constant"
-	"github.com/emitra-labs/identity-service/controller/session"
-	"github.com/emitra-labs/identity-service/controller/user"
-	"github.com/emitra-labs/identity-service/controller/verification"
 	"github.com/emitra-labs/identity-service/db"
 	"github.com/emitra-labs/identity-service/model"
 	"github.com/golang-jwt/jwt/v5"
@@ -33,7 +30,7 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 
 	alreadyExists := false
 
-	u, err := user.CreateUser(ctx, &model.CreateUserRequest{
+	u, err := CreateUser(ctx, &model.CreateUserRequest{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
@@ -68,7 +65,7 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 			return nil, errors.Internal()
 		}
 	} else {
-		v, err := verification.CreateVerification(ctx, &model.CreateVerificationRequest{
+		verification, err := CreateVerification(ctx, &model.CreateVerificationRequest{
 			UserID:    u.ID,
 			ExpiresAt: time.Now().Add(15 * time.Minute),
 		})
@@ -86,7 +83,7 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 				Actions: []mail.Action{
 					{
 						Text: "Verify your account",
-						Link: fmt.Sprintf("%s/verify?userId=%s&token=%s", os.Getenv("EMAIL_AUTH_URL"), u.ID, v.Token),
+						Link: fmt.Sprintf("%s/verify?userId=%s&token=%s", os.Getenv("EMAIL_AUTH_URL"), u.ID, verification.Token),
 					},
 				},
 			},
@@ -107,7 +104,7 @@ func SignIn(ctx context.Context, req *model.SignInRequest) (*model.SignInRespons
 		return nil, err
 	}
 
-	u, err := user.GetUser(ctx, &model.GetUserRequest{
+	u, err := GetUser(ctx, &model.GetUserRequest{
 		Email:  req.Email,
 		Status: constant.UserStatusActive,
 	})
@@ -125,7 +122,7 @@ func SignIn(ctx context.Context, req *model.SignInRequest) (*model.SignInRespons
 		return nil, err
 	}
 
-	s, err := session.CreateSession(ctx, &model.CreateSessionRequest{
+	s, err := CreateSession(ctx, &model.CreateSessionRequest{
 		UserID:    u.ID,
 		ExpiresAt: time.Now().AddDate(0, 0, 7),
 	})
@@ -147,7 +144,7 @@ func SignIn(ctx context.Context, req *model.SignInRequest) (*model.SignInRespons
 		return nil, err
 	}
 
-	_, err = session.DeleteOldSessions(ctx, &model.DeleteOldSessionsRequest{
+	_, err = DeleteOldSessions(ctx, &model.DeleteOldSessionsRequest{
 		UserID: u.ID,
 	})
 	if err != nil {
@@ -168,7 +165,7 @@ func SignIn(ctx context.Context, req *model.SignInRequest) (*model.SignInRespons
 }
 
 func RefreshToken(ctx context.Context, req *model.RefreshTokenRequest) (*model.SignInResponse, error) {
-	session, err := session.GetSession(ctx, &model.GetSessionRequest{
+	session, err := GetSession(ctx, &model.GetSessionRequest{
 		Token:  req.Token,
 		UserID: req.UserID,
 	})
@@ -176,7 +173,7 @@ func RefreshToken(ctx context.Context, req *model.RefreshTokenRequest) (*model.S
 		return nil, err
 	}
 
-	u, err := user.GetUser(ctx, &model.GetUserRequest{
+	u, err := GetUser(ctx, &model.GetUserRequest{
 		ID: session.UserID,
 	})
 	if err != nil {
@@ -221,7 +218,7 @@ func RefreshToken(ctx context.Context, req *model.RefreshTokenRequest) (*model.S
 func SignOut(ctx context.Context, req *commonModel.Empty) (*commonModel.BasicResponse, error) {
 	sessionID, _ := ctx.Value(commonConstant.SessionID).(string)
 
-	_, err := session.DeleteSession(ctx, &model.DeleteSessionRequest{
+	_, err := DeleteSession(ctx, &model.DeleteSessionRequest{
 		ID: sessionID,
 	})
 	if err != nil {
