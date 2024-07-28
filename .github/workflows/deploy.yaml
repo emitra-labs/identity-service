@@ -14,10 +14,12 @@ jobs:
       packages: write
     secrets: inherit
   
-  # deploy:
-  #   uses: emitra-labs/actions/.github/workflows/deploy-kubernetes.yaml@main
-  #   needs: build
-  #   if: github.event_name == 'push'
-  #   permissions:
-  #     contents: read
-  #   secrets: inherit
+  deploy:
+    uses: emitra-labs/actions/.github/workflows/deploy-kubernetes.yaml@main
+    needs: build
+    if: github.event_name == 'push'
+    permissions:
+      contents: read
+    with:
+      env-vars: true
+    secrets: inherit
