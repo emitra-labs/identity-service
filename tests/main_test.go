@@ -9,7 +9,6 @@ import (
 	"github.com/emitra-labs/common/amqp"
 	commonAuth "github.com/emitra-labs/common/auth"
 	dt "github.com/emitra-labs/common/db/testkit"
-	"github.com/emitra-labs/common/mail"
 	"github.com/emitra-labs/identity-service/constant"
 	"github.com/emitra-labs/identity-service/controller"
 	"github.com/emitra-labs/identity-service/db"
@@ -39,7 +38,6 @@ func setup() {
 	amqp.DeclareQueues("user-mutation")
 	dt.CreateTestDB()
 	db.Open()
-	mail.Open(os.Getenv("SMTP_URL"))
 
 	ctx := context.Background()
 
@@ -93,7 +91,6 @@ func setup() {
 
 func teardown() {
 	amqp.Close()
-	mail.Close()
 	db.Close()
 	dt.DestroyTestDB()
 }

@@ -12,12 +12,12 @@ import (
 	"github.com/emitra-labs/common/hash"
 	"github.com/emitra-labs/common/id"
 	"github.com/emitra-labs/common/log"
-	"github.com/emitra-labs/common/mail"
 	commonModel "github.com/emitra-labs/common/model"
 	"github.com/emitra-labs/common/validator"
 	"github.com/emitra-labs/identity-service/constant"
 	"github.com/emitra-labs/identity-service/db"
 	"github.com/emitra-labs/identity-service/model"
+	"github.com/emitra-labs/pb/mail"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -30,7 +30,7 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 
 	alreadyExists := false
 
-	u, err := CreateUser(ctx, &model.CreateUserRequest{
+	user, err := CreateUser(ctx, &model.CreateUserRequest{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
@@ -45,17 +45,17 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 	}
 
 	if alreadyExists {
-		err = mail.Send(mail.Email{
-			From:    os.Getenv("EMAIL_FROM"),
+		_, err = mailClient.SendTransactional(ctx, &mail.SendTransactionalRequest{
+			From:    os.Getenv("MAIL_FROM"),
 			To:      req.Email,
-			Subject: "Sign in to Your Account",
-			Body: mail.Body{
+			Subject: "Sign in to your account",
+			Body: &mail.TransactionalBody{
 				Name:   req.Name,
 				Intros: []string{"Your email has been registered. Please click the link below to proceed."},
-				Actions: []mail.Action{
+				Actions: []*mail.TransactionalAction{
 					{
+						Link: os.Getenv("AUTH_URL") + "/sign-in",
 						Text: "Sign in",
-						Link: os.Getenv("EMAIL_AUTH_URL") + "/sign-in",
 					},
 				},
 			},
@@ -66,24 +66,24 @@ func SignUp(ctx context.Context, req *model.SignUpRequest) (*commonModel.BasicRe
 		}
 	} else {
 		verification, err := CreateVerification(ctx, &model.CreateVerificationRequest{
-			UserID:    u.ID,
+			UserID:    user.ID,
 			ExpiresAt: time.Now().Add(15 * time.Minute),
 		})
 		if err != nil {
 			return nil, err
 		}
 
-		err = mail.Send(mail.Email{
-			From:    os.Getenv("EMAIL_FROM"),
+		_, err = mailClient.SendTransactional(ctx, &mail.SendTransactionalRequest{
+			From:    os.Getenv("MAIL_FROM"),
 			To:      req.Email,
-			Subject: "Verify Your Account",
-			Body: mail.Body{
+			Subject: "Verify your account",
+			Body: &mail.TransactionalBody{
 				Name:   req.Name,
 				Intros: []string{"You need to pass the verification step. Please click the link below to proceed."},
-				Actions: []mail.Action{
+				Actions: []*mail.TransactionalAction{
 					{
 						Text: "Verify your account",
-						Link: fmt.Sprintf("%s/verify?userId=%s&token=%s", os.Getenv("EMAIL_AUTH_URL"), u.ID, verification.Token),
+						Link: fmt.Sprintf("%s/verify?userId=%s&token=%s", os.Getenv("AUTH_URL"), user.ID, verification.Token),
 					},
 				},
 			},
